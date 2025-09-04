@@ -1,16 +1,16 @@
 <template>
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+  <div class="container mx-auto px-4 py-8 bg-white rounded-xl shadow-lg overflow-hidden">
     <!-- 标题区 -->
     <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
       <h1 class="text-2xl font-bold text-white">{{ title }}</h1>
       <p class="text-blue-100 mt-1">{{ subtitle }}</p>
     </div>
 
-    <div
-      class="security-banner bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center"
-      v-if="showSecurityBanner"
-    >
-      <el-icon class="text-green-500 mr-2"><lock /></el-icon>
+    <div class="security-banner bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center"
+      v-if="showSecurityBanner">
+      <el-icon class="text-green-500 mr-2">
+        <lock />
+      </el-icon>
       <span class="text-sm text-green-700">
         {{ securityText }}
       </span>

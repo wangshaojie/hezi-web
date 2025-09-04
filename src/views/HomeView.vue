@@ -1,271 +1,491 @@
-<script setup lang="ts">
-import HomeFooter from '@/layouts/components/HomeFooter.vue'
-import { ref } from 'vue'
+<template>
+  <div
+    class=" bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 transition-colors duration-300">
+    <!-- 导航栏 -->
+    <header
+      class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm transition-all duration-300">
+      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-globe text-2xl text-blue-600 dark:text-blue-400"></i>
+          <h1
+            class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+            WebCollection</h1>
+        </div>
 
-// 本站工具
-const localTools = ref([
+        <div class="flex items-center gap-4">
+          <!-- 搜索框 -->
+          <div class="relative hidden md:block">
+            <input v-model="searchQuery" type="text" placeholder="搜索应用或网站..."
+              class="pl-10 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 w-64 transition-all duration-300">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          </div>
+
+          <!-- 移动端搜索按钮 -->
+          <button class="md:hidden p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            @click="showMobileSearch = !showMobileSearch">
+            <i class="fas fa-search"></i>
+          </button>
+
+          <!-- 主题切换 -->
+          <button class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            @click="toggleTheme">
+            <i class="fas" :class="isDarkMode ? 'fa-sun' : 'fa-moon'"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 移动端搜索框 -->
+      <div v-if="showMobileSearch" class="md:hidden px-4 pb-3">
+        <input v-model="searchQuery" type="text" placeholder="搜索应用或网站..."
+          class="w-full pl-10 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300">
+        <i class="fas fa-search absolute left-7 top-[3.8rem] text-gray-400"></i>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <!-- 分类标签 -->
+      <div class="mb-8 overflow-x-auto pb-2">
+        <div class="flex gap-2 min-w-max">
+          <button @click="activeCategory = 'all'"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300" :class="activeCategory === 'all'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-200/50 dark:shadow-blue-900/30'
+              : 'bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-sm'">
+            全部
+          </button>
+          <button @click="activeCategory = 'tools'"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300" :class="activeCategory === 'tools'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-200/50 dark:shadow-blue-900/30'
+              : 'bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-sm'">
+            工具类
+          </button>
+          <button @click="activeCategory = 'design'"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300" :class="activeCategory === 'design'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-200/50 dark:shadow-blue-900/30'
+              : 'bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-sm'">
+            设计类
+          </button>
+          <button @click="activeCategory = 'development'"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300" :class="activeCategory === 'development'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-200/50 dark:shadow-blue-900/30'
+              : 'bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-sm'">
+            开发类
+          </button>
+          <button @click="activeCategory = 'productivity'"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300" :class="activeCategory === 'productivity'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-200/50 dark:shadow-blue-900/30'
+              : 'bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-sm'">
+            生产力
+          </button>
+          <button @click="activeCategory = 'mine'"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300" :class="activeCategory === 'mine'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200/50 dark:shadow-indigo-900/30'
+              : 'bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 shadow-sm'">
+            我的应用
+          </button>
+        </div>
+      </div>
+
+      <!-- 内容标题 -->
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold">
+          {{ activeCategory === 'all' ? '所有应用与网站' :
+            activeCategory === 'mine' ? '我的Web应用' :
+              categoryNames[activeCategory] }}
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">
+          {{ activeCategory === 'all' ? '探索所有实用工具和应用' :
+            activeCategory === 'mine' ? '我开发的Web应用集合' :
+              categoryDescriptions[activeCategory] }}
+        </p>
+      </div>
+
+      <!-- 应用卡片网格 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- 过滤后的应用 -->
+        <template v-for="item in filteredItems" :key="item.id">
+          <button @click="openInNewWindow(item.url)" class="group w-full">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col transform hover:-translate-y-1">
+              <!-- 应用图标 -->
+              <div class="p-6 flex justify-center">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center" :class="item.category === 'mine'
+                  ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400'
+                  : 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400'">
+                  <i class="fas text-2xl" :class="item.icon"></i>
+                </div>
+              </div>
+
+              <!-- 应用信息 -->
+              <div class="p-4 pb-6 flex-grow flex flex-col">
+                <div class="flex justify-between items-start mb-2">
+                  <h3
+                    class="font-bold text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {{ item.name }}
+                  </h3>
+                  <span class="text-xs px-2 py-1 rounded-full" :class="item.category === 'mine'
+                    ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400'
+                    : 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400'">
+                    {{ item.category === 'mine' ? '我的应用' : categoryLabels[item.category] }}
+                  </span>
+                </div>
+
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-grow">
+                  {{ item.description }}
+                </p>
+
+                <!-- 访问按钮 -->
+                <div class="mt-auto pt-2">
+                  <span
+                    class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:underline">
+                    访问网站
+                    <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </button>
+        </template>
+      </div>
+
+      <!-- 空状态 -->
+      <div v-if="filteredItems.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+        <div class="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-6">
+          <i class="fas fa-search text-4xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">未找到匹配项</h3>
+        <p class="text-gray-500 dark:text-gray-400 max-w-md">
+          尝试使用不同的搜索词或浏览其他分类，以找到您需要的应用或网站。
+        </p>
+        <button @click="resetFilters"
+          class="mt-6 px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
+          查看所有内容
+        </button>
+      </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white dark:bg-gray-900 shadow-inner mt-16 py-8">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex items-center gap-2 mb-4 md:mb-0">
+            <i class="fas fa-globe text-xl text-blue-600 dark:text-blue-400"></i>
+            <span class="font-bold">WebCollection</span>
+          </div>
+
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            &copy; {{ new Date().getFullYear() }} WebCollection. 收集实用网站与应用。
+          </div>
+
+          <div class="flex gap-4 mt-4 md:mt-0">
+            <a href="#" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <i class="fas fa-github"></i>
+            </a>
+            <a href="#" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <i class="fas fa-twitter"></i>
+            </a>
+            <a href="#" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <i class="fas fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+// 路由实例
+const router = useRouter()
+
+// 状态管理
+const searchQuery = ref('')
+const activeCategory = ref('all')
+const showMobileSearch = ref(false)
+
+// 应用数据
+const items = ref([
+  // 工具类
   {
     id: 1,
-    title: '小红书封面生成器',
-    description: '一键生成小红书封面，小红书模板，一键生成',
-    gradient: 'from-gray-400 to-gray-500',
-    url: '/xiaohongshu-temp',
+    name: '在线截图工具',
+    description: '快速截取屏幕内容并进行标注和分享',
+    url: '/screenshot-tool',
+    category: 'tools',
+    icon: 'fa-crop'
   },
   {
     id: 2,
-    title: '图片加水印',
-    description: '给图片添加水印，文字，图片，自定义水印，自定义位置',
-    gradient: 'from-gray-400 to-gray-500',
-    url: '/watermark',
+    name: 'PDF转换器',
+    description: '在线转换PDF与其他格式文件，支持批量处理',
+    url: '/pdf-converter',
+    category: 'tools',
+    icon: 'fa-file-pdf'
   },
   {
     id: 3,
-    title: 'PDF转图片',
-    description: '将PDF文件转换为图片，支持批量转换',
-    gradient: 'from-gray-400 to-gray-500',
-    url: '/pdf-to-image',
+    name: '密码生成器',
+    description: '创建高强度随机密码，保障账户安全',
+    url: '/password-generator',
+    category: 'tools',
+    icon: 'fa-key'
   },
+
+  // 设计类
   {
     id: 4,
-    title: '抽奖',
-    description: '抽奖工具，支持抽奖，抽奖结果导出',
-    gradient: 'from-gray-400 to-gray-500',
-    url: '/raffle',
+    name: '配色方案工具',
+    description: '生成和谐的色彩组合，适用于设计和开发',
+    url: '/color-scheme',
+    category: 'design',
+    icon: 'fa-palette'
   },
   {
     id: 5,
-    title: 'OCR识别图片文字',
-    description: 'OCR识别图片文字，支持批量识别',
-    gradient: 'from-gray-400 to-gray-500',
-    url: '/ocr-page',
+    name: '图标库',
+    description: '海量免费矢量图标，可直接下载使用',
+    url: '/icon-library',
+    category: 'design',
+    icon: 'fa-icons'
   },
   {
     id: 6,
-    title: '定时提醒',
-    description: '定时提醒，支持定时提醒',
-    gradient: 'from-gray-400 to-gray-500',
-    url: '/reminder',
+    name: '原型设计工具',
+    description: '快速创建交互式UI原型，用于产品演示',
+    url: '/prototype-tool',
+    category: 'design',
+    icon: 'fa-pen-tool'
   },
+
+  // 开发类
   {
     id: 7,
-    title: '工资核算',
+    name: '代码在线运行',
+    description: '支持多种编程语言的在线代码编辑和运行',
+    url: '/code-runner',
+    category: 'development',
+    icon: 'fa-code'
+  },
+  {
+    id: 8,
+    name: 'API文档生成',
+    description: '自动生成美观的API文档，支持多种格式',
+    url: '/api-docs',
+    category: 'development',
+    icon: 'fa-file-code'
+  },
+  {
+    id: 9,
+    name: '性能测试工具',
+    description: '分析网站性能并提供优化建议',
+    url: '/performance-test',
+    category: 'development',
+    icon: 'fa-tachometer-alt'
+  },
+
+  // 生产力
+  {
+    id: 10,
+    name: '任务管理',
+    description: '组织和跟踪您的任务，提高工作效率',
+    url: '/task-manager',
+    category: 'productivity',
+    icon: 'fa-tasks'
+  },
+  {
+    id: 11,
+    name: '笔记工具',
+    description: '创建和管理笔记，支持富文本和Markdown',
+    url: '/note-tool',
+    category: 'productivity',
+    icon: 'fa-sticky-note'
+  },
+  {
+    id: 12,
+    name: '时间跟踪',
+    description: '记录工作时间，分析时间使用情况',
+    url: '/time-tracker',
+    category: 'productivity',
+    icon: 'fa-clock'
+  },
+
+  // 我的应用
+  {
+    id: 13,
+    name: '个人仪表盘',
+    description: '集成多个服务的个人数据仪表盘',
+    url: '/dashboard',
+    category: 'mine',
+    icon: 'fa-chart-pie'
+  },
+  {
+    id: 14,
+    name: '书签管理器',
+    description: '高效管理和分类网络书签',
+    url: '/bookmark-manager',
+    category: 'mine',
+    icon: 'fa-bookmark'
+  },
+  {
+    id: 15,
+    name: '数据可视化工具',
+    description: '将数据转换为直观的图表和图形',
+    url: '/data-visualization',
+    category: 'mine',
+    icon: 'fa-chart-line'
+  },
+
+  // 本地工具
+  {
+    id: 16,
+    name: '小红书封面生成器',
+    description: '一键生成小红书封面，小红书模板，一键生成',
+    url: '/xiaohongshu-temp',
+    category: 'mine',
+    icon: 'fa-image'
+  },
+  {
+    id: 17,
+    name: '图片加水印',
+    description: '给图片添加水印，文字，图片，自定义水印，自定义位置',
+    url: '/watermark',
+    category: 'mine',
+    icon: 'fa-stamp'
+  },
+  {
+    id: 18,
+    name: 'PDF转图片',
+    description: '将PDF文件转换为图片，支持批量转换',
+    url: '/pdf-to-image',
+    category: 'mine',
+    icon: 'fa-file-image'
+  },
+  {
+    id: 19,
+    name: '抽奖',
+    description: '抽奖工具，支持抽奖，抽奖结果导出',
+    url: '/raffle',
+    category: 'mine',
+    icon: 'fa-gift'
+  },
+  {
+    id: 20,
+    name: 'OCR识别图片文字',
+    description: 'OCR识别图片文字，支持批量识别',
+    url: '/ocr-page',
+    category: 'mine',
+    icon: 'fa-font'
+  },
+  {
+    id: 21,
+    name: '定时提醒',
+    description: '定时提醒，支持定时提醒',
+    url: '/reminder',
+    category: 'mine',
+    icon: 'fa-bell'
+  },
+  {
+    id: 22,
+    name: '工资核算',
     description: '工资核算，支持工资核算',
-    gradient: 'from-gray-400 to-gray-500',
     url: '/salary-calculation',
-  },
-])
-
-const designResources = ref([
-  {
-    id: 1,
-    title: 'Dribbble',
-    description: '设计师作品展示平台，寻找灵感的好地方',
-    gradient: 'from-purple-400 to-blue-500',
-    url: '#',
-  },
-  {
-    id: 2,
-    title: 'Behance',
-    description: 'Adobe旗下的创意作品展示平台',
-    gradient: 'from-pink-400 to-red-500',
-    url: '#',
-  },
-  {
-    id: 3,
-    title: 'Awwwards',
-    description: '评选最佳网页设计的权威网站',
-    gradient: 'from-yellow-400 to-orange-500',
-    url: '#',
-  },
-  {
-    id: 4,
-    title: 'UI Movement',
-    description: '每日精选UI动效设计',
-    gradient: 'from-green-400 to-teal-500',
-    url: '#',
-  },
-])
-
-const devTools = ref([
-  {
-    id: 1,
-    title: 'GitHub',
-    description: '全球最大的代码托管平台',
-    gradient: 'from-blue-400 to-indigo-500',
-    url: '#',
-  },
-  {
-    id: 2,
-    title: 'CodePen',
-    description: '前端开发者的游乐场',
-    gradient: 'from-purple-400 to-pink-500',
-    url: '#',
-  },
-  {
-    id: 3,
-    title: 'Stack Overflow',
-    description: '开发者问答社区',
-    gradient: 'from-yellow-400 to-amber-500',
-    url: '#',
-  },
-])
-
-const learningPlatforms = ref([
-  {
-    id: 1,
-    title: 'Coursera',
-    description: '世界顶尖大学在线课程',
-    gradient: 'from-indigo-400 to-purple-500',
-    url: '#',
-  },
-  {
-    id: 2,
-    title: 'Udemy',
-    description: '海量实用技能课程',
-    gradient: 'from-blue-400 to-cyan-500',
-    url: '#',
-  },
-  {
-    id: 3,
-    title: 'Khan Academy',
-    description: '免费优质教育资源',
-    gradient: 'from-green-400 to-emerald-500',
-    url: '#',
-  },
-])
-
-const navigateToDetail = (item: { url: string; id: number }) => {
-  if (item.url === 'detail') {
-    window.open(`/detail/${item.id}`, '_blank')
-  } else {
-    window.open(item.url, '_blank')
+    category: 'mine',
+    icon: 'fa-calculator'
   }
+])
+
+// 分类配置
+const categoryNames = {
+  tools: '工具类网站',
+  design: '设计资源',
+  development: '开发工具',
+  productivity: '生产力应用',
+  mine: '我的Web应用'
 }
+
+const categoryLabels = {
+  tools: '工具',
+  design: '设计',
+  development: '开发',
+  productivity: '生产力'
+}
+
+const categoryDescriptions = {
+  tools: '各种实用工具，帮助解决日常问题',
+  design: '设计相关资源和工具，提升创意工作效率',
+  development: '程序员常用开发工具和资源',
+  productivity: '提高工作和学习效率的应用'
+}
+
+// 过滤显示的项目
+const filteredItems = computed(() => {
+  return items.value.filter(item => {
+    // 分类过滤
+    const categoryMatch = activeCategory.value === 'all' || item.category === activeCategory.value
+
+    // 搜索过滤
+    const searchMatch = searchQuery.value === '' ||
+      item.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    return categoryMatch && searchMatch
+  })
+})
+
+// 深色模式状态
+const isDarkMode = computed(() => {
+  return document.documentElement.classList.contains('dark')
+})
+
+// 打开新窗口的方法
+const openInNewWindow = (path) => {
+  // 生成完整URL
+  const fullPath = window.location.origin + router.resolve(path).href
+  // 在新窗口打开
+  window.open(fullPath, '_blank')
+}
+
+// 切换主题模式
+const toggleTheme = () => {
+  document.documentElement.classList.toggle('dark')
+}
+
+// 重置筛选条件
+const resetFilters = () => {
+  searchQuery.value = ''
+  activeCategory.value = 'all'
+}
+
+// 检查用户偏好的主题
+onMounted(() => {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark')
+  }
+})
 </script>
 
-<template>
-  <!-- 搜索栏 -->
-  <div class="mb-8">
-    <div class="relative max-w-2xl">
-      <el-input
-        type="text"
-        placeholder="搜索优质网站..."
-        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-      />
-      <button
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded-lg"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-      </button>
-    </div>
-  </div>
+<style>
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
 
-  <!-- 内容板块 -->
-  <div class="space-y-12">
-    <!-- 设计资源板块 -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-        <span class="w-2 h-6 bg-blue-500 mr-3"></span>
-        设计资源
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
-          v-for="item in designResources"
-          :key="item.id"
-          class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-          @click="navigateToDetail(item)"
-        >
-          <div class="h-40 bg-gradient-to-r" :class="item.gradient"></div>
-          <div class="p-5">
-            <h3 class="text-xl font-semibold mb-2">{{ item.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ item.description }}</p>
-            <a :href="item.url" class="text-blue-500 font-medium hover:underline">访问网站 →</a>
-          </div>
-        </div>
-      </div>
-    </section>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 
-    <!-- 开发工具板块 -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-        <span class="w-2 h-6 bg-green-500 mr-3"></span>
-        开发工具
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
-          v-for="item in devTools"
-          :key="item.id"
-          class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-          @click="navigateToDetail(item)"
-        >
-          <div class="h-40 bg-gradient-to-r" :class="item.gradient"></div>
-          <div class="p-5">
-            <h3 class="text-xl font-semibold mb-2">{{ item.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ item.description }}</p>
-            <a :href="item.url" class="text-blue-500 font-medium hover:underline">访问网站 →</a>
-          </div>
-        </div>
-      </div>
-    </section>
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    <!-- 学习平台板块 -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-        <span class="w-2 h-6 bg-red-500 mr-3"></span>
-        学习平台
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
-          v-for="item in learningPlatforms"
-          :key="item.id"
-          class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-          @click="navigateToDetail(item)"
-        >
-          <div class="h-40 bg-gradient-to-r" :class="item.gradient"></div>
-          <div class="p-5">
-            <h3 class="text-xl font-semibold mb-2">{{ item.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ item.description }}</p>
-            <a :href="item.url" class="text-blue-500 font-medium hover:underline">访问网站 →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- 本站工具 -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-        <span class="w-2 h-6 bg-red-500 mr-3"></span>
-        本站工具
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
-          v-for="item in localTools"
-          :key="item.id"
-          class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-          @click="navigateToDetail(item)"
-        >
-          <div class="h-40 bg-gradient-to-r" :class="item.gradient"></div>
-          <div class="p-5">
-            <h3 class="text-xl font-semibold mb-2">{{ item.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ item.description }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- 底部 -->
-  <HomeFooter />
-</template>
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+</style>
