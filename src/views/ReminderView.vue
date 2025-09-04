@@ -9,11 +9,11 @@ const reminderText = ref('')
 const reminderTime = ref('')
 const isRunning = ref(false)
 const isReminding = ref(false)
-const countdownInterval = ref(null)
+const countdownInterval = ref<number | null>(null)
 const totalSeconds = ref(0)
-const targetDate = ref(null)
+const targetDate = ref<Date | null>(null)
 const soundEnabled = ref(true) // 声音开关状态
-let audio = null // 音频对象
+let audio: HTMLAudioElement | null = null // 音频对象
 
 // 计算倒计时显示格式
 const countdownDisplay = computed(() => {
@@ -50,7 +50,7 @@ const playSound = () => {
   }
 
   // 播放音频
-  audio.play().catch((error) => {
+  audio.play().catch((error: unknown) => {
     console.error('播放声音失败:', error)
     ElNotification({
       title: '提示',
@@ -117,7 +117,9 @@ const startReminder = () => {
   // 开始倒计时
   countdownInterval.value = setInterval(() => {
     if (totalSeconds.value <= 0) {
-      clearInterval(countdownInterval.value)
+      if (countdownInterval.value) {
+        clearInterval(countdownInterval.value)
+      }
       triggerReminder()
     } else {
       totalSeconds.value--
@@ -177,7 +179,9 @@ const resetForm = () => {
   reminderText.value = ''
   reminderTime.value = ''
   isRunning.value = false
-  clearInterval(countdownInterval.value)
+  if (countdownInterval.value) {
+    clearInterval(countdownInterval.value)
+  }
   countdownInterval.value = null
   totalSeconds.value = 0
   targetDate.value = null
@@ -217,47 +221,32 @@ onUnmounted(() => {
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
           <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-2">提醒内容</label>
-            <input
-              v-model="reminderText"
-              type="text"
+            <input v-model="reminderText" type="text"
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="输入提醒内容"
-            />
+              placeholder="输入提醒内容" />
           </div>
 
           <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-2">选择提醒时间</label>
-            <el-time-picker
-              v-model="reminderTime"
-              placeholder="选择时间"
-              format="HH:mm:ss"
-              value-format="HH:mm:ss"
-              class="w-full"
-            >
+            <el-time-picker v-model="reminderTime" placeholder="选择时间" format="HH:mm:ss" value-format="HH:mm:ss"
+              class="w-full">
             </el-time-picker>
           </div>
 
-          <el-button
-            @click="startReminder"
-            :disabled="isRunning || !reminderTime"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
-          >
+          <el-button @click="startReminder" :disabled="isRunning || !reminderTime"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
             设置提醒
           </el-button>
-          <el-button
-            @click="toggleSound"
-            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-          >
+          <el-button @click="toggleSound"
+            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
             <i :class="soundEnabled ? 'fa fa-volume-up' : 'fa fa-volume-off'"></i>
             <span>{{ soundEnabled ? '开启声音' : '关闭声音' }}</span>
           </el-button>
         </div>
 
         <!-- 倒计时显示 -->
-        <div
-          v-if="isRunning"
-          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg shadow-lg p-8 mb-6 text-white"
-        >
+        <div v-if="isRunning"
+          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg shadow-lg p-8 mb-6 text-white">
           <h2 class="text-xl font-bold mb-4">距离提醒还剩</h2>
           <div class="flex justify-center">
             <div class="text-6xl font-bold" id="countdown-display">{{ countdownDisplay }}</div>
@@ -271,25 +260,17 @@ onUnmounted(() => {
         </div>
 
         <!-- 强提醒弹窗 -->
-        <div
-          v-if="isReminding"
-          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-        >
+        <div v-if="isReminding" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div
-            class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full transform transition-all scale-100 opacity-100"
-          >
+            class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full transform transition-all scale-100 opacity-100">
             <div class="text-center">
-              <div
-                class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4"
-              >
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
                 <i class="fa fa-bell text-red-500 text-3xl"></i>
               </div>
               <h3 class="text-2xl font-bold text-gray-900 mb-2">时间到！</h3>
               <p class="text-gray-600 mb-6">{{ reminderText }}</p>
-              <button
-                @click="stopReminder"
-                class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
+              <button @click="stopReminder"
+                class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                 我知道了
               </button>
             </div>
@@ -303,10 +284,12 @@ onUnmounted(() => {
 <style scoped>
 /* 添加动画效果 */
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   10%,
   30%,
   50%,
@@ -314,6 +297,7 @@ onUnmounted(() => {
   90% {
     transform: translateX(-5px);
   }
+
   20%,
   40%,
   60%,
@@ -332,10 +316,12 @@ onUnmounted(() => {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }

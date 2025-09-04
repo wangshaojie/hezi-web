@@ -12,25 +12,22 @@
         <!-- 左侧抽奖配置区 -->
         <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
           <h2 class="text-2xl font-semibold mb-6 flex items-center">
-            <el-icon class="mr-2"><Setting /></el-icon>
+            <el-icon class="mr-2">
+              <Setting />
+            </el-icon>
             抽奖配置
           </h2>
 
           <!-- 用户导入 -->
           <div class="mb-8">
             <h3 class="text-lg mb-3 flex items-center">
-              <el-icon class="mr-1"><User /></el-icon>
+              <el-icon class="mr-1">
+                <User />
+              </el-icon>
               参与人员
             </h3>
-            <el-upload
-              class="upload-demo"
-              drag
-              action="#"
-              :auto-upload="false"
-              :on-change="handleFileUpload"
-              :show-file-list="false"
-              accept=".xlsx,.xls"
-            >
+            <el-upload class="upload-demo" drag action="#" :auto-upload="false" :on-change="handleFileUpload"
+              :show-file-list="false" accept=".xlsx,.xls">
               <el-icon class="el-icon--upload"><upload-filled /></el-icon>
               <div class="el-upload__text text-gray-600">点击或拖拽Excel文件到此处</div>
               <template #tip>
@@ -46,31 +43,26 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <h3 class="text-lg flex items-center">
-                <el-icon class="mr-1"><Trophy /></el-icon>
+                <el-icon class="mr-1">
+                  <Trophy />
+                </el-icon>
                 奖项设置
               </h3>
               <el-button @click="addPrize" type="primary" size="small" circle>
-                <el-icon><Plus /></el-icon>
+                <el-icon>
+                  <Plus />
+                </el-icon>
               </el-button>
             </div>
 
             <div class="space-y-4">
-              <div
-                v-for="(prize, index) in prizes"
-                :key="index"
-                class="bg-white/10 p-4 rounded-lg transition-all hover:bg-white/15"
-              >
+              <div v-for="(prize, index) in prizes" :key="index"
+                class="bg-white/10 p-4 rounded-lg transition-all hover:bg-white/15">
                 <div class="flex items-start gap-3">
                   <div class="flex-1">
                     <el-input v-model="prize.name" placeholder="奖项名称" class="mb-2" clearable />
-                    <el-input
-                      v-model="prize.description"
-                      placeholder="奖品描述"
-                      class="mb-2"
-                      clearable
-                      type="textarea"
-                      :rows="2"
-                    />
+                    <el-input v-model="prize.description" placeholder="奖品描述" class="mb-2" clearable type="textarea"
+                      :rows="2" />
                     <div class="flex items-center gap-4">
                       <div class="flex items-center">
                         <span class="text-sm mr-2">中奖人数:</span>
@@ -80,7 +72,9 @@
                     </div>
                   </div>
                   <el-button @click="removePrize(index)" type="danger" size="small" text circle>
-                    <el-icon><Close /></el-icon>
+                    <el-icon>
+                      <Close />
+                    </el-icon>
                   </el-button>
                 </div>
               </div>
@@ -91,7 +85,9 @@
         <!-- 中间参与名单区 -->
         <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
           <h2 class="text-2xl font-semibold mb-6 flex items-center">
-            <el-icon class="mr-2"><List /></el-icon>
+            <el-icon class="mr-2">
+              <List />
+            </el-icon>
             参与名单
           </h2>
 
@@ -100,7 +96,9 @@
               <div class="flex-1">
                 <el-input v-model="searchQuery" placeholder="搜索姓名..." clearable>
                   <template #prefix>
-                    <el-icon><Search /></el-icon>
+                    <el-icon>
+                      <Search />
+                    </el-icon>
                   </template>
                 </el-input>
               </div>
@@ -110,13 +108,7 @@
             </div>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar">
-              <el-table
-                :data="filteredUsers"
-                height="100%"
-                style="width: 100%"
-                stripe
-                empty-text="暂无数据或未导入名单"
-              >
+              <el-table :data="filteredUsers" height="100%" style="width: 100%" stripe empty-text="暂无数据或未导入名单">
                 <el-table-column prop="name" label="姓名" min-width="120">
                   <template #default="{ row }">
                     <div class="flex items-center gap-3">
@@ -129,12 +121,7 @@
                 </el-table-column>
                 <el-table-column prop="prize" label="奖项">
                   <template #default="{ row }">
-                    <el-tag
-                      v-if="row.prize"
-                      :type="getPrizeTagType(row.prize)"
-                      size="small"
-                      effect="dark"
-                    >
+                    <el-tag v-if="row.prize" :type="getPrizeTagType(row.prize)" size="small" effect="dark">
                       {{ row.prize }}
                     </el-tag>
                     <span v-else class="text-gray-400">-</span>
@@ -148,7 +135,9 @@
         <!-- 右侧抽奖结果区 -->
         <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
           <h2 class="text-2xl font-semibold mb-6 flex items-center">
-            <el-icon class="mr-2"><Star /></el-icon>
+            <el-icon class="mr-2">
+              <Star />
+            </el-icon>
             抽奖结果
           </h2>
 
@@ -161,17 +150,11 @@
                 </span>
               </div>
               <div class="space-y-2">
-                <div
-                  v-for="winner in getPrizeWinners(prize.name)"
-                  :key="winner.name"
-                  class="bg-white/5 p-2 rounded-lg text-sm"
-                >
-                  {{ winner.name }}
+                <div v-for="winner in getPrizeWinners(prize.name)" :key="winner.name"
+                  class="bg-white/5 p-2 rounded-lg text-sm">
+                  {{ winner?.name || '-' }}
                 </div>
-                <div
-                  v-if="getPrizeWinners(prize.name).length === 0"
-                  class="text-center text-gray-400 py-2"
-                >
+                <div v-if="getPrizeWinners(prize.name).length === 0" class="text-center text-gray-400 py-2">
                   暂无中奖记录
                 </div>
               </div>
@@ -188,27 +171,15 @@
     </div>
 
     <!-- 抽奖弹窗 -->
-    <el-dialog
-      v-model="showDrawDialog"
-      title="选择奖项"
-      width="80%"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :show-close="false"
-      class="draw-dialog"
-    >
+    <el-dialog v-model="showDrawDialog" title="选择奖项" width="80%" :close-on-click-modal="false"
+      :close-on-press-escape="false" :show-close="false" class="draw-dialog">
       <div class="flex gap-8">
         <!-- 左侧奖项列表 -->
         <div class="w-64">
           <div class="text-lg font-bold mb-4">奖项列表</div>
           <div class="space-y-2">
-            <div
-              v-for="(prize, index) in prizes"
-              :key="prize.name"
-              class="prize-item"
-              :class="{ 'prize-item-active': selectedPrize === index }"
-              @click="selectPrize(index)"
-            >
+            <div v-for="(prize, index) in prizes" :key="prize.name" class="prize-item"
+              :class="{ 'prize-item-active': selectedPrize === index }" @click="selectPrize(index)">
               <div class="flex items-center justify-between">
                 <span>{{ prize.name }}</span>
                 <el-tag :type="prize.completed ? 'success' : 'warning'" size="small">
@@ -264,12 +235,7 @@
             </div>
 
             <div class="mt-8">
-              <el-button
-                v-if="hasRemainingSlots"
-                type="primary"
-                @click="continueDraw"
-                class="continue-btn"
-              >
+              <el-button v-if="hasRemainingSlots" type="primary" @click="continueDraw" class="continue-btn">
                 继续抽取
               </el-button>
               <el-button @click="closeWinnerDialog" class="close-btn"> 关闭 </el-button>
@@ -287,29 +253,18 @@
                 <div class="bg-white/5 rounded-lg p-4 mb-6">
                   <div class="text-lg font-medium mb-2">已中奖名单</div>
                   <div class="space-y-2">
-                    <div
-                      v-for="winner in getPrizeWinners(currentPrizeName)"
-                      :key="winner.name"
-                      class="text-sm bg-white/10 p-2 rounded"
-                    >
+                    <div v-for="winner in getPrizeWinners(currentPrizeName)" :key="winner.name"
+                      class="text-sm bg-white/10 p-2 rounded">
                       {{ winner.name }}
                     </div>
-                    <div
-                      v-if="getPrizeWinners(currentPrizeName).length === 0"
-                      class="text-gray-400"
-                    >
+                    <div v-if="getPrizeWinners(currentPrizeName).length === 0" class="text-gray-400">
                       暂无中奖记录
                     </div>
                   </div>
                 </div>
               </div>
-              <el-button
-                type="primary"
-                size="large"
-                class="!h-16 !text-xl"
-                @click="startDraw"
-                :disabled="!canStartDraw"
-              >
+              <el-button type="primary" size="large" class="!h-16 !text-xl" @click="startDraw"
+                :disabled="!canStartDraw">
                 开始抽奖
               </el-button>
             </template>
@@ -342,17 +297,33 @@ import {
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+// 类型定义
+interface User {
+  name: string
+  avatar: string
+  won: boolean
+  prize: string
+}
+
+interface Prize {
+  name: string
+  count: number
+  completed: boolean
+  description: string
+  drawOneByOne: boolean
+}
+
 // 数据
-const users = ref([])
-const prizes = ref([
+const users = ref<User[]>([])
+const prizes = ref<Prize[]>([
   { name: '特等奖', count: 1, completed: false, description: '', drawOneByOne: true },
   { name: '一等奖', count: 3, completed: false, description: '', drawOneByOne: true },
   { name: '二等奖', count: 5, completed: false, description: '', drawOneByOne: true },
   { name: '三等奖', count: 10, completed: false, description: '', drawOneByOne: true },
 ])
-const winners = ref([])
+const winners = ref<User[]>([])
 const searchQuery = ref('')
-const selectedPrize = ref(null)
+const selectedPrize = ref<number | null>(null)
 const drawing = ref(false)
 const currentDrawName = ref('')
 const currentWinnerIndex = ref(0)
@@ -361,7 +332,7 @@ const progress = ref(0)
 const showDrawDialog = ref(false)
 const showWinnerResult = ref(false)
 const currentDrawAvatar = ref('')
-const currentWinnersList = ref([])
+const currentWinnersList = ref<User[]>([])
 
 // 计算属性
 const filteredUsers = computed(() => {
@@ -390,7 +361,7 @@ const hasRemainingSlots = computed(() => {
 })
 
 // 方法
-const handleFileUpload = async (file) => {
+const handleFileUpload = async (file: { raw: File }) => {
   try {
     const data = await readExcelFile(file.raw) // 使用 file.raw 获取原始文件对象
     if (data && data.length > 0) {
@@ -412,12 +383,16 @@ const handleFileUpload = async (file) => {
   }
 }
 
-const readExcelFile = (file) => {
-  return new Promise((resolve, reject) => {
+const readExcelFile = (file: File) => {
+  return new Promise<User[]>((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = (e) => {
       try {
-        const data = e.target.result
+        const data = e.target?.result
+        if (!data) {
+          reject(new Error('文件读取失败'))
+          return
+        }
         const workbook = XLSX.read(data, { type: 'array' })
         const firstSheetName = workbook.SheetNames[0]
         const worksheet = workbook.Sheets[firstSheetName]
@@ -426,10 +401,10 @@ const readExcelFile = (file) => {
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           range: 1, // 从第二行开始读取
           header: ['name', 'avatar'], // 直接指定列名
-        })
+        }) as { name?: string; avatar?: string }[]
 
         // 处理数据，确保每个用户对象都包含必要的字段
-        const result = jsonData.map((row) => ({
+        const result: User[] = jsonData.map((row: { name?: string; avatar?: string }) => ({
           name: row.name || '',
           avatar: row.avatar || '/default-avatar.png',
           won: false,
@@ -456,7 +431,7 @@ const addPrize = () => {
   })
 }
 
-const removePrize = async (index) => {
+const removePrize = async (index: number) => {
   try {
     await ElMessageBox.confirm('确定删除该奖项吗？已中奖记录不会被删除', '提示', {
       type: 'warning',
@@ -467,7 +442,7 @@ const removePrize = async (index) => {
   }
 }
 
-const getPrizeTagType = (prize) => {
+const getPrizeTagType = (prize: string) => {
   if (prize.includes('特等')) return 'danger'
   if (prize.includes('一等')) return 'warning'
   if (prize.includes('二等')) return 'primary'
@@ -482,6 +457,7 @@ const openDrawDialog = () => {
 const startDraw = () => {
   if (!canStartDraw.value) return
 
+  if (selectedPrize.value === null) return
   const prize = prizes.value[selectedPrize.value]
   const availableUsers = users.value.filter((user) => !user.won)
 
@@ -505,7 +481,7 @@ const startDraw = () => {
 
   // 如果是一次性抽取，也显示动画效果
   if (!prize.drawOneByOne) {
-    const winners = []
+    const winners: User[] = []
     const availableUsersCopy = [...availableUsers]
     const drawCount = Math.min(remainingSlots, availableUsersCopy.length)
 
@@ -529,7 +505,7 @@ const startDraw = () => {
         })
 
         // 更新奖项状态
-        const currentWinnersCount = winners.value.filter((w) => w.prize === prize.name).length
+        const currentWinnersCount = winners.filter((w) => w.prize === prize.name).length
         if (currentWinnersCount >= prize.count) {
           prize.completed = true
         }
@@ -582,6 +558,7 @@ const startDraw = () => {
 }
 
 const drawNextWinner = () => {
+  if (selectedPrize.value === null) return
   const prize = prizes.value[selectedPrize.value]
   const availableUsers = users.value.filter((user) => !user.won)
 
@@ -624,6 +601,7 @@ const continueDraw = () => {
 
 const closeDrawDialog = () => {
   showDrawDialog.value = false
+  if (selectedPrize.value === null) return
   const prize = prizes.value[selectedPrize.value]
 
   // 检查是否已经抽完所有名额
@@ -706,17 +684,17 @@ const exportWinners = () => {
           ElMessage.success('CSV导出成功')
         }
       })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('导出失败:', error)
-    ElMessage.error(`导出失败: ${error.message}`)
+    ElMessage.error(`导出失败: ${error instanceof Error ? error.message : '未知错误'}`)
   }
 }
 
-const getPrizeWinners = (prizeName) => {
+const getPrizeWinners = (prizeName: string) => {
   return users.value.filter((user) => user.prize === prizeName)
 }
 
-const selectPrize = (index) => {
+const selectPrize = (index: number) => {
   const prize = prizes.value[index]
   if (prize.completed) {
     ElMessage.warning(`${prize.name}已抽取完毕！`)
@@ -733,6 +711,7 @@ const selectPrize = (index) => {
 
 const closeWinnerDialog = () => {
   showWinnerResult.value = false
+  if (selectedPrize.value === null) return
   const prize = prizes.value[selectedPrize.value]
 
   // 检查是否已经抽完所有名额
@@ -799,6 +778,7 @@ const closeWinnerDialog = () => {
     transform: scale(1);
     text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
   }
+
   50% {
     transform: scale(1.05);
     text-shadow:
@@ -806,6 +786,7 @@ const closeWinnerDialog = () => {
       0 0 40px rgba(251, 191, 36, 0.4),
       0 0 50px rgba(251, 191, 36, 0.2);
   }
+
   100% {
     transform: scale(1);
     text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
@@ -835,6 +816,7 @@ const closeWinnerDialog = () => {
   color: #fff;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   background: linear-gradient(to right, #fbbf24, #f59e0b);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 2.5rem;
@@ -984,6 +966,7 @@ const closeWinnerDialog = () => {
   0% {
     transform: rotateY(0deg);
   }
+
   100% {
     transform: rotateY(360deg);
   }
@@ -994,6 +977,7 @@ const closeWinnerDialog = () => {
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -1005,6 +989,7 @@ const closeWinnerDialog = () => {
     opacity: 0.5;
     transform: translate(-50%, -50%) scale(0.8);
   }
+
   100% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
