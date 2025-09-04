@@ -406,6 +406,14 @@ const items = ref<AppItem[]>([
     url: '/salary-calculation',
     category: 'mine',
     icon: 'fa-calculator'
+  },
+  {
+    id: 23,
+    name: '爱情计算器',
+    description: '爱情计算器，支持爱情计算',
+    url: '/love-page',
+    category: 'mine',
+    icon: 'fa-heart'
   }
 ])
 

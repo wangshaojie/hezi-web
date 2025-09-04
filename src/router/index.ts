@@ -76,6 +76,14 @@ const router = createRouter({
           },
         },
         {
+          path: 'love-page',
+          name: 'LovePage',
+          component: () => import('@/views/LovePage.vue'),
+          meta: {
+            title: '爱情计算器',
+          },
+        },
+        {
           path: 'about',
           name: 'about',
           component: () => import('@/views/AboutView.vue'),
