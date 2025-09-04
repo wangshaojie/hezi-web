@@ -200,13 +200,26 @@ import { useRouter } from 'vue-router'
 // 路由实例
 const router = useRouter()
 
+// 类型定义
+type CategoryType = 'all' | 'tools' | 'design' | 'development' | 'productivity' | 'mine'
+
 // 状态管理
 const searchQuery = ref('')
-const activeCategory = ref('all')
+const activeCategory = ref<CategoryType>('all')
 const showMobileSearch = ref(false)
 
+// 应用数据类型
+interface AppItem {
+  id: number
+  name: string
+  description: string
+  url: string
+  category: CategoryType
+  icon: string
+}
+
 // 应用数据
-const items = ref([
+const items = ref<AppItem[]>([
   // 工具类
   {
     id: 1,
@@ -406,6 +419,7 @@ const categoryNames = {
 }
 
 const categoryLabels = {
+  all: "全部",
   tools: '工具',
   design: '设计',
   development: '开发',
@@ -440,7 +454,7 @@ const isDarkMode = computed(() => {
 })
 
 // 打开新窗口的方法
-const openInNewWindow = (path) => {
+const openInNewWindow = (path: string) => {
   // 生成完整URL
   const fullPath = window.location.origin + router.resolve(path).href
   // 在新窗口打开
