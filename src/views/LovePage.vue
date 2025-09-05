@@ -44,7 +44,7 @@
       <div class="container mx-auto px-4 z-20 text-center">
         <h1
           class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-400 dark:to-purple-400 animate-fade-in">
-          亲爱的，我爱你
+          亲爱的，小白
         </h1>
         <p class="text-xl md:text-2xl max-w-2xl mx-auto mb-10 leading-relaxed">
           每一天和你在一起都是上天的恩赐，感谢你出现在我的生命里，给我带来无尽的快乐和温暖。
