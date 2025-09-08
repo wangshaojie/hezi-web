@@ -263,7 +263,71 @@ interface ExtendedNavigator extends Navigator {
   }
   deviceMemory?: number
   systemLanguage?: string
+  userLanguage?: string
   getBattery?: () => Promise<BatteryManager>
+}
+
+// 扩展Window接口以包含传感器API
+interface ExtendedWindow extends Window {
+  Accelerometer?: new (options?: { frequency?: number }) => Accelerometer
+  Gyroscope?: new (options?: { frequency?: number }) => Gyroscope
+  Magnetometer?: new (options?: { frequency?: number }) => { x: number; y: number; z: number }
+  AmbientLightSensor?: new (options?: { frequency?: number }) => { illuminance: number }
+  ProximitySensor?: new (options?: { frequency?: number }) => { distance: number }
+}
+
+// 扩展Performance接口以包含memory属性
+interface ExtendedPerformance extends Performance {
+  memory?: {
+    usedJSHeapSize: number
+    totalJSHeapSize: number
+    jsHeapSizeLimit: number
+  }
+}
+
+// 扩展Screen接口以包含refreshRate和事件监听器
+interface ExtendedScreen extends Screen {
+  refreshRate?: number
+  addEventListener?: (type: string, listener: EventListener) => void
+  removeEventListener?: (type: string, listener: EventListener) => void
+}
+
+// 网络信息接口
+interface NetworkInformation {
+  type: string
+  effectiveType: string
+  downlink?: number
+  rtt?: number
+  saveData: boolean
+  addEventListener?: (type: string, listener: () => void) => void
+}
+
+// 传感器接口
+interface Accelerometer {
+  x: number
+  y: number
+  z: number
+  addEventListener: (type: string, listener: () => void) => void
+  start: () => void
+  stop: () => void
+}
+
+interface Gyroscope {
+  x: number
+  y: number
+  z: number
+  addEventListener: (type: string, listener: () => void) => void
+  start: () => void
+  stop: () => void
+}
+
+// 电池管理器接口
+interface BatteryManager {
+  charging: boolean
+  chargingTime: number
+  dischargingTime: number
+  level: number
+  addEventListener: (type: string, listener: () => void) => void
 }
 
 // 定义类型
@@ -522,20 +586,18 @@ const collectSystemInfo = async () => {
 const collectBrowserInfo = (): void => {
   try {
     const userAgent = navigator.userAgent
-    const vendor = navigator.vendor
-    const extendedNavigator = navigator as ExtendedNavigator
 
     browser.value = {
       userAgent,
-      language: navigator.language || navigator.userLanguage || '未知',
+      language: navigator.language || (navigator as ExtendedNavigator).userLanguage || '未知',
       touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
       inIframe: window.self !== window.top,
       cookieEnabled: navigator.cookieEnabled,
       onLine: navigator.onLine,
       hardwareConcurrency: navigator.hardwareConcurrency,
-      name: detectBrowserName(userAgent, vendor),
+      name: detectBrowserName(userAgent),
       version: detectBrowserVersion(userAgent),
-      engine: detectBrowserEngine(userAgent, vendor)
+      engine: detectBrowserEngine(userAgent)
     }
     console.log('浏览器信息收集完成', browser.value)
   } catch (err) {
@@ -544,7 +606,7 @@ const collectBrowserInfo = (): void => {
   }
 }
 
-const detectBrowserName = (userAgent: string, vendor: string): string => {
+const detectBrowserName = (userAgent: string): string => {
   if (userAgent.includes('Edg')) return 'Edge'
   if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) return 'Chrome'
   if (userAgent.includes('Firefox')) return 'Firefox'
@@ -564,7 +626,7 @@ const detectBrowserVersion = (userAgent: string): string => {
     'Internet Explorer': /(Trident\/.*rv:|MSIE) (\d+\.\d+)/
   }
 
-  for (const [browserName, regex] of Object.entries(versionRegex)) {
+  for (const [, regex] of Object.entries(versionRegex)) {
     const match = userAgent.match(regex)
     if (match) return match[2] || match[1]
   }
@@ -572,10 +634,10 @@ const detectBrowserVersion = (userAgent: string): string => {
   return '未知版本'
 }
 
-const detectBrowserEngine = (userAgent: string, vendor: string): string => {
+const detectBrowserEngine = (userAgent: string): string => {
   if (userAgent.includes('Gecko') && !userAgent.includes('like Gecko')) return 'Gecko'
   if (userAgent.includes('WebKit') && !userAgent.includes('Chrome')) return 'WebKit'
-  if (userAgent.includes('Blink') || (vendor.includes('Google') && userAgent.includes('Chrome'))) return 'Blink'
+  if (userAgent.includes('Blink')) return 'Blink'
   if (userAgent.includes('Trident')) return 'Trident'
   return '未知引擎'
 }
@@ -583,7 +645,6 @@ const detectBrowserEngine = (userAgent: string, vendor: string): string => {
 const collectOsInfo = (): void => {
   try {
     const userAgent = navigator.userAgent
-    const extendedNavigator = navigator as ExtendedNavigator
     let osName = '未知操作系统'
 
     if (userAgent.includes('Windows')) osName = 'Windows'
@@ -599,10 +660,10 @@ const collectOsInfo = (): void => {
       ...os.value,
       name: osName,
       platform: navigator.platform || '未知',
-      architecture: extendedNavigator.userAgentData?.platform || navigator.platform || '未知',
-      deviceMemory: extendedNavigator.deviceMemory,
+      architecture: (navigator as ExtendedNavigator).userAgentData?.platform || navigator.platform || '未知',
+      deviceMemory: (navigator as ExtendedNavigator).deviceMemory,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '未知',
-      systemLanguage: extendedNavigator.systemLanguage || navigator.language || '未知'
+      systemLanguage: (navigator as ExtendedNavigator).systemLanguage || navigator.language || '未知'
     }
     console.log('操作系统信息收集完成', os.value)
   } catch (err) {
@@ -613,11 +674,10 @@ const collectOsInfo = (): void => {
 
 const estimateTotalRAM = (): void => {
   try {
-    const extendedNavigator = navigator as ExtendedNavigator
-    if (extendedNavigator.deviceMemory) {
-      os.value.totalRAM = extendedNavigator.deviceMemory * 1024 * 1024 * 1024
-    } else if (window.performance && window.performance.memory) {
-      const totalMemory = window.performance.memory.totalJSHeapSize
+    if ((navigator as ExtendedNavigator).deviceMemory) {
+      os.value.totalRAM = (navigator as ExtendedNavigator).deviceMemory! * 1024 * 1024 * 1024
+    } else if (window.performance && (window.performance as ExtendedPerformance).memory) {
+      const totalMemory = (window.performance as ExtendedPerformance).memory!.totalJSHeapSize
       os.value.totalRAM = totalMemory * 7 // 粗略估计
     }
     console.log('内存信息收集完成', os.value.totalRAM)
@@ -629,9 +689,8 @@ const estimateTotalRAM = (): void => {
 
 const checkBatteryStatus = async (): Promise<void> => {
   try {
-    const extendedNavigator = navigator as ExtendedNavigator
 
-    if (!extendedNavigator.getBattery) {
+    if (!(navigator as ExtendedNavigator).getBattery) {
       battery.value = {
         status: '不支持电池API',
         level: null,
@@ -642,7 +701,7 @@ const checkBatteryStatus = async (): Promise<void> => {
       return
     }
 
-    const batteryManager = await extendedNavigator.getBattery!()
+    const batteryManager = await (navigator as ExtendedNavigator).getBattery!()
 
     const updateBatteryInfo = () => {
       battery.value = {
@@ -652,7 +711,7 @@ const checkBatteryStatus = async (): Promise<void> => {
         chargingTime: batteryManager.chargingTime || null,
         dischargingTime: batteryManager.dischargingTime || null,
         // 电池健康度 - 仅部分浏览器支持
-        health: (batteryManager as any).health ? Math.round((batteryManager as any).health * 100) : undefined
+        health: (batteryManager as BatteryManager & { health?: number }).health ? Math.round((batteryManager as BatteryManager & { health?: number }).health! * 100) : undefined
       }
     }
 
@@ -690,8 +749,8 @@ const collectDisplayInfo = (): void => {
 
     devicePixelRatio.value = window.devicePixelRatio
 
-    if (window.screen?.refreshRate) {
-      screenRefreshRate.value = Math.round(window.screen.refreshRate)
+    if ((window.screen as ExtendedScreen)?.refreshRate) {
+      screenRefreshRate.value = Math.round((window.screen as ExtendedScreen).refreshRate!)
     }
 
     updateScreenOrientation()
@@ -705,8 +764,8 @@ const collectDisplayInfo = (): void => {
 const updateScreenOrientation = (): void => {
   try {
     const orientation = window.screen.orientation ||
-      (window.screen as any).mozOrientation ||
-      (window.screen as any).msOrientation
+      (window.screen as ExtendedScreen & { mozOrientation?: { type: string } }).mozOrientation ||
+      (window.screen as ExtendedScreen & { msOrientation?: { type: string } }).msOrientation
 
     if (orientation) {
       screenOrientation.value = orientation.type
@@ -736,16 +795,20 @@ const collectNetworkInfo = (): void => {
 
     const connection = connectionNavigator.connection || connectionNavigator.mozConnection || connectionNavigator.webkitConnection
 
-    network.value = {
-      ...network.value,
-      type: connection.type || '未知',
-      effectiveType: connection.effectiveType || '未知',
-      downlink: connection.downlink,
-      rtt: connection.rtt,
-      saveData: connection.saveData || false
-    }
+    if (connection) {
+      network.value = {
+        ...network.value,
+        type: connection.type || '未知',
+        effectiveType: connection.effectiveType || '未知',
+        downlink: connection.downlink,
+        rtt: connection.rtt,
+        saveData: connection.saveData || false
+      }
 
-    connection.addEventListener('change', collectNetworkInfo)
+      if (connection.addEventListener) {
+        connection.addEventListener('change', collectNetworkInfo)
+      }
+    }
     console.log('网络信息收集完成', network.value)
   } catch (err) {
     console.error('收集网络信息错误:', err)
@@ -809,29 +872,29 @@ const detectSensors = (): void => {
   try {
     sensors.value.orientation = 'ondeviceorientation' in window
 
-    if (typeof window.Accelerometer !== 'undefined') {
+    if (typeof (window as ExtendedWindow).Accelerometer !== 'undefined') {
       sensors.value.accelerometer = true
     } else if ('ondevicemotion' in window) {
       sensors.value.accelerometer = true
     }
 
-    if (typeof window.Gyroscope !== 'undefined') {
+    if (typeof (window as ExtendedWindow).Gyroscope !== 'undefined') {
       sensors.value.gyroscope = true
     } else if ('ondevicemotion' in window) {
       sensors.value.gyroscope = true
     }
 
-    if (typeof window.Magnetometer !== 'undefined') {
+    if (typeof (window as ExtendedWindow).Magnetometer !== 'undefined') {
       sensors.value.magnetometer = true
     } else if ('ondeviceorientation' in window) {
       sensors.value.magnetometer = true
     }
 
-    if (typeof window.AmbientLightSensor !== 'undefined') {
+    if (typeof (window as ExtendedWindow).AmbientLightSensor !== 'undefined') {
       sensors.value.lightSensor = true
     }
 
-    if (typeof window.ProximitySensor !== 'undefined') {
+    if (typeof (window as ExtendedWindow).ProximitySensor !== 'undefined') {
       sensors.value.proximitySensor = true
     }
 
@@ -878,10 +941,10 @@ const startSensorMonitoring = (): void => {
   isMonitoringSensors.value = true
   sensors.value.readings = {}
 
-  if (typeof window.Accelerometer !== 'undefined') {
+  if (typeof (window as ExtendedWindow).Accelerometer !== 'undefined') {
     try {
-      sensorReaders.value.accelerometer = new Accelerometer({ frequency: 5 })
-      sensorReaders.value.accelerometer.addEventListener('reading', () => {
+      sensorReaders.value.accelerometer = new (window as ExtendedWindow).Accelerometer!({ frequency: 5 })
+      sensorReaders.value.accelerometer?.addEventListener('reading', () => {
         if (sensorReaders.value.accelerometer) {
           sensors.value.readings = {
             ...sensors.value.readings,
@@ -893,7 +956,7 @@ const startSensorMonitoring = (): void => {
           }
         }
       })
-      sensorReaders.value.accelerometer.start()
+      sensorReaders.value.accelerometer?.start()
     } catch (err) {
       console.error('初始化加速度计错误:', err)
     }
@@ -901,10 +964,10 @@ const startSensorMonitoring = (): void => {
     window.addEventListener('devicemotion', handleDeviceMotion)
   }
 
-  if (typeof window.Gyroscope !== 'undefined') {
+  if (typeof (window as ExtendedWindow).Gyroscope !== 'undefined') {
     try {
-      sensorReaders.value.gyroscope = new Gyroscope({ frequency: 5 })
-      sensorReaders.value.gyroscope.addEventListener('reading', () => {
+      sensorReaders.value.gyroscope = new (window as ExtendedWindow).Gyroscope!({ frequency: 5 })
+      sensorReaders.value.gyroscope?.addEventListener('reading', () => {
         if (sensorReaders.value.gyroscope) {
           sensors.value.readings = {
             ...sensors.value.readings,
@@ -916,7 +979,7 @@ const startSensorMonitoring = (): void => {
           }
         }
       })
-      sensorReaders.value.gyroscope.start()
+      sensorReaders.value.gyroscope?.start()
     } catch (err) {
       console.error('初始化陀螺仪错误:', err)
     }
@@ -927,7 +990,7 @@ const stopSensorMonitoring = (): void => {
   isMonitoringSensors.value = false
 
   Object.values(sensorReaders.value).forEach(sensor => {
-    if (sensor && sensor.stop) {
+    if (sensor && 'stop' in sensor && typeof sensor.stop === 'function') {
       sensor.stop()
     }
   })
@@ -1030,13 +1093,13 @@ const collectPerformanceInfo = (): void => {
     if (performanceData.getEntriesByType) {
       const paintEntries = performanceData.getEntriesByType('paint')
       if (paintEntries.length > 0) {
-        performanceInfo.value.firstPaint = (paintEntries[0] as any).startTime
+        performanceInfo.value.firstPaint = (paintEntries[0] as PerformanceEntry & { startTime: number }).startTime
       }
     }
 
     // 内存使用情况
-    if ((performanceData as any).memory) {
-      performanceInfo.value.memoryUsed = (performanceData as any).memory.usedJSHeapSize
+    if ((performanceData as ExtendedPerformance).memory) {
+      performanceInfo.value.memoryUsed = (performanceData as ExtendedPerformance).memory!.usedJSHeapSize
     }
 
     console.log('性能信息收集完成', performanceInfo.value)
@@ -1046,7 +1109,8 @@ const collectPerformanceInfo = (): void => {
 }
 
 // 工具函数：格式化字节数
-const formatBytes = (bytes: number, decimals = 2): string => {
+const formatBytes = (bytes: number | null, decimals = 2): string => {
+  if (bytes === null || bytes === undefined) return '未知'
   if (bytes === 0) return '0 Bytes'
 
   const k = 1024
@@ -1082,7 +1146,10 @@ const handleOnlineStatusChange = () => {
 const addEventListeners = (): void => {
   window.addEventListener('online', handleOnlineStatusChange)
   window.addEventListener('offline', handleOnlineStatusChange)
-  window.screen.addEventListener('orientationchange', updateScreenOrientation)
+  const extendedScreen = window.screen as ExtendedScreen
+  if (extendedScreen.addEventListener) {
+    extendedScreen.addEventListener('orientationchange', updateScreenOrientation)
+  }
   window.addEventListener('resize', collectDisplayInfo)
 
   // 每秒更新一次当前时间
@@ -1092,7 +1159,10 @@ const addEventListeners = (): void => {
 const removeEventListeners = (): void => {
   window.removeEventListener('online', handleOnlineStatusChange)
   window.removeEventListener('offline', handleOnlineStatusChange)
-  window.screen.removeEventListener('orientationchange', updateScreenOrientation)
+  const extendedScreen = window.screen as ExtendedScreen
+  if (extendedScreen.removeEventListener) {
+    extendedScreen.removeEventListener('orientationchange', updateScreenOrientation)
+  }
   window.removeEventListener('resize', collectDisplayInfo)
 }
 
