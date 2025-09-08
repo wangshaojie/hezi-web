@@ -225,7 +225,7 @@ const items = ref<AppItem[]>([
     id: 1,
     name: '在线截图工具',
     description: '快速截取屏幕内容并进行标注和分享',
-    url: '/screenshot-tool',
+    url: 'https://shoteasy.fun/zh-cn/take-a-screenshot/',
     category: 'tools',
     icon: 'fa-crop'
   },
@@ -233,7 +233,7 @@ const items = ref<AppItem[]>([
     id: 2,
     name: 'PDF转换器',
     description: '在线转换PDF与其他格式文件，支持批量处理',
-    url: '/pdf-converter',
+    url: 'https://tools.pdf24.org/zh/all-tools',
     category: 'tools',
     icon: 'fa-file-pdf'
   },
@@ -241,7 +241,7 @@ const items = ref<AppItem[]>([
     id: 3,
     name: '密码生成器',
     description: '创建高强度随机密码，保障账户安全',
-    url: '/password-generator',
+    url: 'https://www.avast.com/zh-cn/random-password-generator#pc',
     category: 'tools',
     icon: 'fa-key'
   },
@@ -251,7 +251,7 @@ const items = ref<AppItem[]>([
     id: 4,
     name: '配色方案工具',
     description: '生成和谐的色彩组合，适用于设计和开发',
-    url: '/color-scheme',
+    url: 'https://coolors.co/palettes/trending',
     category: 'design',
     icon: 'fa-palette'
   },
@@ -259,7 +259,7 @@ const items = ref<AppItem[]>([
     id: 5,
     name: '图标库',
     description: '海量免费矢量图标，可直接下载使用',
-    url: '/icon-library',
+    url: 'https://www.flaticon.com/',
     category: 'design',
     icon: 'fa-icons'
   },
@@ -267,7 +267,7 @@ const items = ref<AppItem[]>([
     id: 6,
     name: '原型设计工具',
     description: '快速创建交互式UI原型，用于产品演示',
-    url: '/prototype-tool',
+    url: 'https://wireframe.cc/',
     category: 'design',
     icon: 'fa-pen-tool'
   },
@@ -281,63 +281,22 @@ const items = ref<AppItem[]>([
     category: 'development',
     icon: 'fa-code'
   },
-  {
-    id: 8,
-    name: 'API文档生成',
-    description: '自动生成美观的API文档，支持多种格式',
-    url: '/api-docs',
-    category: 'development',
-    icon: 'fa-file-code'
-  },
-  {
-    id: 9,
-    name: '性能测试工具',
-    description: '分析网站性能并提供优化建议',
-    url: '/performance-test',
-    category: 'development',
-    icon: 'fa-tachometer-alt'
-  },
 
   // 生产力
   {
-    id: 10,
-    name: '任务管理',
-    description: '组织和跟踪您的任务，提高工作效率',
-    url: '/task-manager',
-    category: 'productivity',
-    icon: 'fa-tasks'
-  },
-  {
     id: 11,
-    name: '笔记工具',
+    name: '在线Markdown',
     description: '创建和管理笔记，支持富文本和Markdown',
-    url: '/note-tool',
+    url: 'https://markdown-editor.github.io/',
     category: 'productivity',
     icon: 'fa-sticky-note'
   },
-  {
-    id: 12,
-    name: '时间跟踪',
-    description: '记录工作时间，分析时间使用情况',
-    url: '/time-tracker',
-    category: 'productivity',
-    icon: 'fa-clock'
-  },
-
   // 我的应用
   {
-    id: 13,
-    name: '个人仪表盘',
-    description: '集成多个服务的个人数据仪表盘',
-    url: '/dashboard',
-    category: 'mine',
-    icon: 'fa-chart-pie'
-  },
-  {
     id: 14,
-    name: '书签管理器',
-    description: '高效管理和分类网络书签',
-    url: '/bookmark-manager',
+    name: '我的设备',
+    description: '',
+    url: '/my-device',
     category: 'mine',
     icon: 'fa-bookmark'
   },
@@ -463,10 +422,15 @@ const isDarkMode = computed(() => {
 
 // 打开新窗口的方法
 const openInNewWindow = (path: string) => {
-  // 生成完整URL
-  const fullPath = window.location.origin + router.resolve(path).href
-  // 在新窗口打开
-  window.open(fullPath, '_blank')
+  // 如果是http开头的URL，直接打开外部链接
+  if (path.startsWith('http')) {
+    window.open(path, '_blank')
+  } else {
+    // 生成完整URL
+    const fullPath = window.location.origin + router.resolve(path).href
+    // 在新窗口打开
+    window.open(fullPath, '_blank')
+  }
 }
 
 // 切换主题模式

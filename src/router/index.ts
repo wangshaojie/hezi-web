@@ -84,6 +84,14 @@ const router = createRouter({
           },
         },
         {
+          path: 'my-device',
+          name: 'MyDevice',
+          component: () => import('@/views/MyDevice.vue'),
+          meta: {
+            title: '我的设备',
+          },
+        },
+        {
           path: 'about',
           name: 'about',
           component: () => import('@/views/AboutView.vue'),
