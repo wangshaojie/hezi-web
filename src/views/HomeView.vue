@@ -373,6 +373,14 @@ const items = ref<AppItem[]>([
     url: '/love-page',
     category: 'mine',
     icon: 'fa-heart'
+  },
+  {
+    id: 24,
+    name: '国家统计局数据可视化',
+    description: '国家统计局数据可视化，支持国家统计局数据可视化',
+    url: '/national-statistics',
+    category: 'mine',
+    icon: 'fa-chart-line'
   }
 ])
 

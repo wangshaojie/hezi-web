@@ -1,0 +1,548 @@
+{
+  "description": "中国人口统计数据 (2015-2024年)",
+  "dataSource": "国家统计局",
+  "lastUpdated": "2024-12-19",
+  "data": [
+    {
+      "year": 2024,
+      "description": "2024年人口数据",
+      "totalPopulation": 140828,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 22240,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 96565,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 22023,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 45.8,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 71909,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68919,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 94350,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 46478,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 6.77,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.76,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": -0.99,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2024年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2023,
+      "description": "2023年人口数据",
+      "totalPopulation": 140967,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 23063,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 96228,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 21676,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 46.5,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 72032,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68935,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 93267,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 47700,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 6.39,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.87,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": -1.48,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2023年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2022,
+      "description": "2022年人口数据",
+      "totalPopulation": 141175,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 23908,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 96289,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 20978,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 46.6,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 72206,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68969,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 92071,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 49104,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 6.77,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.37,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": -0.6,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2022年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2021,
+      "description": "2021年人口数据",
+      "totalPopulation": 141260,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 24678,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 96526,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 20056,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 46.3,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 72311,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68949,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 91425,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 49835,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 7.52,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.18,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 0.34,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2021年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2020,
+      "description": "2020年人口数据",
+      "totalPopulation": 141212,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 25277,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 96871,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 19064,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 45.8,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 72357,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68855,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 90220,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 50992,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 8.52,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.07,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 1.45,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": 77.93,
+        "averageUnit": "岁",
+        "male": 75.37,
+        "maleUnit": "岁",
+        "female": 80.88,
+        "femaleUnit": "岁",
+        "note": "2020年预期寿命数据"
+      }
+    },
+    {
+      "year": 2019,
+      "description": "2019年人口数据",
+      "totalPopulation": 141008,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 23689,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 99552,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 17767,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 41.5,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 72039,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68969,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 88426,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 52582,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 10.41,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.09,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 3.32,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2019年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2018,
+      "description": "2018年人口数据",
+      "totalPopulation": 140541,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 23751,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 100065,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 16724,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 40.4,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 71864,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68677,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 86433,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 54108,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 10.86,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.08,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 3.78,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2018年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2017,
+      "description": "2017年人口数据",
+      "totalPopulation": 140011,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 23522,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 100528,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 15961,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 38.9,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 71650,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 68361,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 84343,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 55668,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 12.64,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.06,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 5.58,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2017年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2016,
+      "description": "2016年人口数据",
+      "totalPopulation": 139232,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 23252,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 100943,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 15037,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 37.9,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 71307,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 67925,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 81924,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 57308,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 13.57,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.04,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 6.53,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": null,
+        "averageUnit": "岁",
+        "male": null,
+        "maleUnit": "岁",
+        "female": null,
+        "femaleUnit": "岁",
+        "note": "2016年预期寿命数据暂未公布"
+      }
+    },
+    {
+      "year": 2015,
+      "description": "2015年人口数据",
+      "totalPopulation": 138326,
+      "totalPopulationUnit": "万人",
+      "ageStructure": {
+        "childPopulation": 22824,
+        "childPopulationUnit": "万人",
+        "childPopulationDescription": "0-14岁人口",
+        "workingPopulation": 100978,
+        "workingPopulationUnit": "万人",
+        "workingPopulationDescription": "15-64岁劳动年龄人口",
+        "elderlyPopulation": 14524,
+        "elderlyPopulationUnit": "万人",
+        "elderlyPopulationDescription": "65岁及以上老年人口",
+        "dependencyRatio": 36.9,
+        "dependencyRatioUnit": "%",
+        "dependencyRatioDescription": "总抚养比"
+      },
+      "genderStructure": {
+        "malePopulation": 70857,
+        "malePopulationUnit": "万人",
+        "femalePopulation": 67469,
+        "femalePopulationUnit": "万人"
+      },
+      "urbanRuralStructure": {
+        "urbanPopulation": 79302,
+        "urbanPopulationUnit": "万人",
+        "ruralPopulation": 59024,
+        "ruralPopulationUnit": "万人"
+      },
+      "vitalRates": {
+        "birthRate": 11.99,
+        "birthRateUnit": "‰",
+        "birthRateDescription": "人口出生率",
+        "deathRate": 7.07,
+        "deathRateUnit": "‰",
+        "deathRateDescription": "人口死亡率",
+        "naturalGrowthRate": 4.93,
+        "naturalGrowthRateUnit": "‰",
+        "naturalGrowthRateDescription": "人口自然增长率"
+      },
+      "lifeExpectancy": {
+        "average": 76.34,
+        "averageUnit": "岁",
+        "male": 73.64,
+        "maleUnit": "岁",
+        "female": 79.43,
+        "femaleUnit": "岁",
+        "note": "2015年预期寿命数据"
+      }
+    }
+  ],
+  "notes": {
+    "dataStructure": "数据按年份降序排列，最新数据在前",
+    "units": {
+      "population": "万人",
+      "rates": "‰ (千分比)",
+      "ratio": "% (百分比)",
+      "age": "岁"
+    },
+    "updateInstructions": [
+      "1. 添加新年份数据时，请将新数据插入到数组开头",
+      "2. 保持数据结构一致性，所有字段都必须包含",
+      "3. 如果某个数据暂未公布，请设置为null",
+      "4. 更新lastUpdated字段为当前日期",
+      "5. 在notes中添加数据来源说明"
+    ],
+    "dataValidation": {
+      "totalPopulation": "应等于childPopulation + workingPopulation + elderlyPopulation",
+      "naturalGrowthRate": "应等于birthRate - deathRate",
+      "dependencyRatio": "应等于(childPopulation + elderlyPopulation) / workingPopulation * 100"
+    }
+  }
+}

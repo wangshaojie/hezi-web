@@ -96,6 +96,15 @@ const router = createRouter({
           name: 'about',
           component: () => import('@/views/AboutView.vue'),
         },
+        // 国家统计局数据可视化
+        {
+          path: 'national-statistics',
+          name: 'NationalStatistics',
+          component: () => import('@/views/NationalStatistics/AnnualDashboard.vue'),
+          meta: {
+            title: '国家统计局数据可视化',
+          },
+        },
       ],
     },
     {

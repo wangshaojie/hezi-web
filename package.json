@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "chart.js": "^4.5.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "dom-to-image": "^2.6.0",
+    "echarts": "^6.0.0",
     "element-plus": "^2.9.10",
     "html2canvas": "^1.4.1",
     "pdfjs-dist": "^3.11.174",
