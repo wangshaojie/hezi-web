@@ -196,6 +196,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { generateAppList, type AppItem } from '@/utils/routeToAppConverter'
 
 // 路由实例
 const router = useRouter()
@@ -208,18 +209,10 @@ const searchQuery = ref('')
 const activeCategory = ref<CategoryType>('all')
 const showMobileSearch = ref(false)
 
-// 应用数据类型
-interface AppItem {
-  id: number
-  name: string
-  description: string
-  url: string
-  category: CategoryType
-  icon: string
-}
+// 应用数据类型（从工具文件导入）
 
-// 应用数据
-const items = ref<AppItem[]>([
+// 外部应用数据（非路由应用）
+const externalApps: AppItem[] = [
   // 工具类
   {
     id: 1,
@@ -291,14 +284,13 @@ const items = ref<AppItem[]>([
     category: 'productivity',
     icon: 'fa-sticky-note'
   },
-  // 我的应用
   {
-    id: 14,
-    name: '我的设备',
-    description: '',
-    url: '/my-device',
+    id: 12,
+    name: 'OCR识别图片文字',
+    description: 'OCR识别图片文字，支持批量识别',
+    url: 'https://web.baimiaoapp.com/',
     category: 'mine',
-    icon: 'fa-bookmark'
+    icon: 'fa-font'
   },
   {
     id: 15,
@@ -307,82 +299,11 @@ const items = ref<AppItem[]>([
     url: '/data-visualization',
     category: 'mine',
     icon: 'fa-chart-line'
-  },
-
-  // 本地工具
-  {
-    id: 16,
-    name: '小红书封面生成器',
-    description: '一键生成小红书封面，小红书模板，一键生成',
-    url: '/xiaohongshu-temp',
-    category: 'mine',
-    icon: 'fa-image'
-  },
-  {
-    id: 17,
-    name: '图片加水印',
-    description: '给图片添加水印，文字，图片，自定义水印，自定义位置',
-    url: '/watermark',
-    category: 'mine',
-    icon: 'fa-stamp'
-  },
-  {
-    id: 18,
-    name: 'PDF转图片',
-    description: '将PDF文件转换为图片，支持批量转换',
-    url: '/pdf-to-image',
-    category: 'mine',
-    icon: 'fa-file-image'
-  },
-  {
-    id: 19,
-    name: '抽奖',
-    description: '抽奖工具，支持抽奖，抽奖结果导出',
-    url: '/raffle',
-    category: 'mine',
-    icon: 'fa-gift'
-  },
-  {
-    id: 20,
-    name: 'OCR识别图片文字',
-    description: 'OCR识别图片文字，支持批量识别',
-    url: '/ocr-page',
-    category: 'mine',
-    icon: 'fa-font'
-  },
-  {
-    id: 21,
-    name: '定时提醒',
-    description: '定时提醒，支持定时提醒',
-    url: '/reminder',
-    category: 'mine',
-    icon: 'fa-bell'
-  },
-  {
-    id: 22,
-    name: '工资核算',
-    description: '工资核算，支持工资核算',
-    url: '/salary-calculation',
-    category: 'mine',
-    icon: 'fa-calculator'
-  },
-  {
-    id: 23,
-    name: '爱情计算器',
-    description: '爱情计算器，支持爱情计算',
-    url: '/love-page',
-    category: 'mine',
-    icon: 'fa-heart'
-  },
-  {
-    id: 24,
-    name: '国家统计局数据可视化',
-    description: '国家统计局数据可视化，支持国家统计局数据可视化',
-    url: '/national-statistics',
-    category: 'mine',
-    icon: 'fa-chart-line'
   }
-])
+]
+
+// 自动生成应用列表（合并外部应用和路由应用）
+const items = ref<AppItem[]>([])
 
 // 分类配置
 const categoryNames = {
@@ -445,6 +366,13 @@ const openInNewWindow = (path: string) => {
 const toggleTheme = () => {
   document.documentElement.classList.toggle('dark')
 }
+
+// 初始化应用列表
+onMounted(() => {
+  // 从路由配置中自动生成应用列表
+  const routeApps = generateAppList(externalApps, router.getRoutes())
+  items.value = routeApps
+})
 
 // 重置筛选条件
 const resetFilters = () => {
