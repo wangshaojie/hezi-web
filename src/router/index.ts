@@ -145,6 +145,42 @@ const router = createRouter({
             icon: 'fa-chart-line',
           },
         },
+        // 2025年全球各行业前10排名
+        {
+          path: 'global-industry-rankings-2025',
+          name: 'GlobalIndustryRankings2025',
+          component: () => import('@/views/GlobalIndustryRankings2025.vue'),
+          meta: {
+            title: '2025年全球各行业前10排名',
+            description: '展示2025年全球各行业的前10名企业排名',
+            category: 'mine',
+            icon: 'fa-chart-bar',
+          },
+        },
+        // 夸克资源
+        {
+          path: 'quark-resources',
+          name: 'QuarkResources',
+          component: () => import('@/views/QuarkResources/index.vue'),
+          meta: {
+            title: '夸克资源',
+            description: '夸克资源页面',
+            category: 'mine',
+            icon: 'fa-cube',
+          },
+        },
+        // Google Earth Converter
+        {
+          path: 'google-earth-converter',
+          name: 'GoogleEarthConverter',
+          component: () => import('@/views/GoogleEarthConverter.vue'),
+          meta: {
+            title: 'Google Earth Converter',
+            description: 'Google Earth 转换工具',
+            category: 'mine',
+            icon: 'fa-globe',
+          },
+        },
       ],
     },
     {
