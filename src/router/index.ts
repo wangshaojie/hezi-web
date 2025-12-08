@@ -43,17 +43,6 @@ const router = createRouter({
           },
         },
         {
-          path: 'pdf-to-image',
-          name: 'PdfToImage',
-          component: () => import('@/views/PdfToImage.vue'),
-          meta: {
-            title: 'PDF转图片',
-            description: '将PDF文件转换为图片，支持批量转换',
-            category: 'mine',
-            icon: 'fa-file-image',
-          },
-        },
-        {
           path: 'raffle',
           name: 'RaffleView',
           component: () => import('@/views/RaffleView.vue'),
@@ -179,18 +168,6 @@ const router = createRouter({
             description: 'Google Earth 转换工具',
             category: 'mine',
             icon: 'fa-globe',
-          },
-        },
-        // 图片合并
-        {
-          path: 'image-merger',
-          name: 'ImageMerger',
-          component: () => import('@/views/ImageMerger.vue'),
-          meta: {
-            title: '图片合并',
-            description: '图片合并工具',
-            category: 'mine',
-            icon: 'fa-images',
           },
         },
         // 股票补仓计算器
