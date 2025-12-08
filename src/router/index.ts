@@ -54,18 +54,6 @@ const router = createRouter({
           },
         },
         {
-          path: 'pdf-lazy-test',
-          name: 'PdfLazyTest',
-          component: () => import('@/views/PdfLazyTest.vue'),
-          meta: {
-            title: 'PDF懒加载测试',
-            description: '测试按需懒加载 pdf.js 依赖的页面',
-            category: 'mine',
-            icon: 'fa-file-pdf',
-            hidden: true, // 不在应用列表中展示，只作为调试/测试页面
-          },
-        },
-        {
           path: 'raffle',
           name: 'RaffleView',
           component: () => import('@/views/RaffleView.vue'),
