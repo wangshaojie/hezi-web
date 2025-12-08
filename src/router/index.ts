@@ -54,6 +54,18 @@ const router = createRouter({
           },
         },
         {
+          path: 'pdf-lazy-test',
+          name: 'PdfLazyTest',
+          component: () => import('@/views/PdfLazyTest.vue'),
+          meta: {
+            title: 'PDF懒加载测试',
+            description: '测试按需懒加载 pdf.js 依赖的页面',
+            category: 'mine',
+            icon: 'fa-file-pdf',
+            hidden: true, // 不在应用列表中展示，只作为调试/测试页面
+          },
+        },
+        {
           path: 'raffle',
           name: 'RaffleView',
           component: () => import('@/views/RaffleView.vue'),
@@ -181,12 +193,31 @@ const router = createRouter({
             icon: 'fa-globe',
           },
         },
+        // 图片合并
+        {
+          path: 'image-merger',
+          name: 'ImageMerger',
+          component: () => import('@/views/ImageMerger.vue'),
+          meta: {
+            title: '图片合并',
+            description: '图片合并工具',
+            category: 'mine',
+            icon: 'fa-images',
+          },
+        },
+        // 股票补仓计算器
+        {
+          path: 'stock-average-cost-calculator',
+          name: 'StockAverageCostCalculator',
+          component: () => import('@/views/StockAverageCostCalculator.vue'),
+          meta: {
+            title: '股票补仓计算器',
+            description: '计算目标成本价需要补仓多少股与所需资金，降低持仓成本',
+            category: 'mine',
+            icon: 'fa-chart-line',
+          },
+        },
       ],
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      name: 'not-found',
-      component: () => import('@/views/NotFound.vue'),
     },
   ],
 })
