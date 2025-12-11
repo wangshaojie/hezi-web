@@ -301,9 +301,9 @@ const externalApps: AppItem[] = [
   // 工具类
   {
     id: 1,
-    name: '在线截图工具',
-    description: '快速截取屏幕内容并进行标注和分享',
-    url: 'https://shoteasy.fun/zh-cn/take-a-screenshot/',
+    name: '在线图片打码',
+    description: '在线打码图片，保护隐私和版权',
+    url: 'https://tool.xuecan.net/pixelate/',
     category: 'tools',
     icon: 'fa-crop',
   },
