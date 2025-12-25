@@ -23,11 +23,14 @@
           <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             <div v-if="sortedRankingData.length">
               <div
-                v-for="item in sortedRankingData"
+                v-for="(item, index) in sortedRankingData"
                 :key="item.code"
                 @click="handleCountryClick(item.code)"
                 class="grid grid-cols-12 py-2 px-3 mb-1 rounded-lg hover:bg-gray-100 transition-all cursor-pointer group"
-                :class="{ 'bg-cyan-50 border-l-4 border-cyan-500': selectedCode === item.code }"
+                :class="[
+                  { 'bg-cyan-50 border-l-4 border-cyan-500': selectedCode === item.code },
+                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
+                ]"
               >
                 <!-- 排名 -->
                 <div class="col-span-3 text-left">
