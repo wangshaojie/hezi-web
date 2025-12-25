@@ -143,7 +143,16 @@
               <div
                 v-for="item in filteredCountryData"
                 :key="item.code"
-                class="bg-white rounded-lg p-2 hover:bg-gray-100 transition-colors border border-gray-200"
+                class="rounded-lg p-2 hover:bg-gray-100 transition-colors"
+                :class="{
+                  'bg-green-50 border border-green-200': item.isVisaFree,
+                  'bg-blue-50 border border-blue-200': item.isElectronicTravelAuthorization,
+                  'bg-yellow-50 border border-yellow-200': item.isVisaOnArrival,
+                  'bg-red-50 border border-red-200':
+                    !item.isVisaFree &&
+                    !item.isElectronicTravelAuthorization &&
+                    !item.isVisaOnArrival,
+                }"
               >
                 <div class="flex justify-between items-center mb-1">
                   <span class="font-semibold text-gray-800 text-sm">
