@@ -23,7 +23,7 @@
           <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             <div v-if="sortedRankingData.length">
               <div
-                v-for="(item, index) in sortedRankingData"
+                v-for="item in sortedRankingData"
                 :key="item.code"
                 @click="handleCountryClick(item.code)"
                 class="grid grid-cols-12 py-2 px-3 mb-1 rounded-lg hover:bg-gray-100 transition-all cursor-pointer group"
@@ -47,7 +47,7 @@
                   <span
                     class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-sm"
                   >
-                    {{ index + 1 }}
+                    {{ item.rank }}
                   </span>
                 </div>
 
@@ -184,34 +184,57 @@
 </template>
 
 <script setup lang="ts">
-import { countryCodeToChineseName } from '@/data/PassportRankingData2025'
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import 'flag-icons/css/flag-icons.min.css'
+import { countryCodeToChineseName } from '@/data/PassportRankingData2025'
 
+/* ----------------------------------
+ * 类型定义
+ * ---------------------------------- */
 interface VisaItem {
   code: string
   name: string
   has_data?: boolean
   visa_free_count?: number
-  isVisaFree?: boolean
-  isElectronicTravelAuthorization?: boolean
-  isVisaOnArrival?: boolean
 }
 
-// 为 countryCodeToChineseName 添加类型断言
-const typedCountryCodeToChineseName = countryCodeToChineseName as Record<string, string>
+interface CountryVisaData {
+  code: string
+  name: string
+}
 
-// 响应式数据
+type VisaStatus = 'free' | 'eta' | 'arrival' | 'visa'
+
+interface VisaApiResponse {
+  visa_free_access?: CountryVisaData[]
+  electronic_travel_authorisation?: CountryVisaData[]
+  visa_on_arrival?: CountryVisaData[]
+}
+
+/* ----------------------------------
+ * 常量 & 工具
+ * ---------------------------------- */
+const cnNameMap = countryCodeToChineseName as Record<string, string>
+
+const normalizeCode = (code: string) => code.toLowerCase()
+
+/* ----------------------------------
+ * 基础状态（单一事实源）
+ * ---------------------------------- */
+const allCountryData = ref<VisaItem[]>([])
 const selectedCode = ref('')
 const selectedCountry = ref('')
 const loading = ref(false)
-const visaFreeAccess = ref<VisaItem[]>([])
-const electronicTravelAuthorization = ref<VisaItem[]>([])
-const visaOnArrival = ref<VisaItem[]>([])
-const allCountryData = ref<VisaItem[]>([])
 
-// 筛选条件变量
+/* ----------------------------------
+ * 签证状态（只和当前国家有关）
+ * ---------------------------------- */
+const visaStatusMap = ref<Record<string, VisaStatus>>({})
+
+/* ----------------------------------
+ * 筛选条件
+ * ---------------------------------- */
 const selectedFilters = ref({
   visaFree: true,
   electronicTravelAuthorization: true,
@@ -219,145 +242,150 @@ const selectedFilters = ref({
   requiresVisa: true,
 })
 
-// 获取所有国家列表
-const getAllCountryData = async () => {
+/* ----------------------------------
+ * 请求缓存
+ * ---------------------------------- */
+const visaCache = new Map<string, VisaApiResponse>()
+
+/* ----------------------------------
+ * API 封装
+ * ---------------------------------- */
+const fetchAllCountries = async () => {
+  const { data } = await axios.get('https://api.henleypassportindex.com/api/v3/countries')
+  return data.countries as VisaItem[]
+}
+
+const fetchVisaData = async (code: string) => {
+  if (visaCache.has(code)) {
+    return visaCache.get(code)
+  }
+  const { data } = await axios.get(`https://api.henleypassportindex.com/api/v3/visa-single/${code}`)
+  visaCache.set(code, data)
+  return data
+}
+
+/* ----------------------------------
+ * 业务逻辑
+ * ---------------------------------- */
+const applyVisaStatus = (apiData: VisaApiResponse) => {
+  const freeSet = new Set(
+    (apiData.visa_free_access || []).map((v: CountryVisaData) => normalizeCode(v.code)),
+  )
+  const etaSet = new Set(
+    (apiData.electronic_travel_authorisation || []).map((v: CountryVisaData) =>
+      normalizeCode(v.code),
+    ),
+  )
+  const arrivalSet = new Set(
+    (apiData.visa_on_arrival || []).map((v: CountryVisaData) => normalizeCode(v.code)),
+  )
+
+  const map: Record<string, VisaStatus> = {}
+
+  allCountryData.value.forEach((country) => {
+    const code = normalizeCode(country.code)
+    map[country.code] = freeSet.has(code)
+      ? 'free'
+      : etaSet.has(code)
+        ? 'eta'
+        : arrivalSet.has(code)
+          ? 'arrival'
+          : 'visa'
+  })
+
+  visaStatusMap.value = map
+}
+
+/* ----------------------------------
+ * 初始化加载
+ * ---------------------------------- */
+const init = async () => {
   try {
-    const response = await axios.get('https://api.henleypassportindex.com/api/v3/countries')
-    allCountryData.value = response.data.countries
+    loading.value = true
+    allCountryData.value = await fetchAllCountries()
 
-    // 数据加载完成后，默认加载第一个国家的数据
-    if (allCountryData.value.length > 0) {
-      // 先对国家数据进行排序，获取排名第一的国家代码
-      const sortedCountries = [...allCountryData.value].sort(
-        (a, b) => (b.visa_free_count || 0) - (a.visa_free_count || 0),
-      )
-      const firstCode = sortedCountries[0]?.code
+    const first = [...allCountryData.value]
+      .filter((c) => c.has_data !== false)
+      .sort((a, b) => (b.visa_free_count ?? 0) - (a.visa_free_count ?? 0))[0]
 
-      if (firstCode) {
-        // 立即设置selectedCode和loading状态，确保左侧loading能正确显示
-        selectedCode.value = firstCode
-        selectedCountry.value = typedCountryCodeToChineseName[firstCode] || ''
-        loading.value = true
-
-        // 调用免签接口获取数据
-        try {
-          const visaResponse = await axios.get(
-            `https://api.henleypassportindex.com/api/v3/visa-single/${firstCode}`,
-          )
-
-          const apiData = visaResponse.data
-          if (apiData.visa_free_access && Array.isArray(apiData.visa_free_access)) {
-            // 分别存储三种签证类型
-            visaFreeAccess.value = apiData.visa_free_access || []
-            electronicTravelAuthorization.value = apiData.electronic_travel_authorisation || []
-            visaOnArrival.value = apiData.visa_on_arrival || []
-
-            // 更新所有国家的签证状态
-            allCountryData.value = allCountryData.value.map((country) => {
-              const countryCode = country.code.toLowerCase()
-              const isVisaFree = visaFreeAccess.value.some(
-                (visa) => visa.code.toLowerCase() === countryCode,
-              )
-              const isElectronicTravelAuthorization = electronicTravelAuthorization.value.some(
-                (visa) => visa.code.toLowerCase() === countryCode,
-              )
-              const isVisaOnArrival = visaOnArrival.value.some(
-                (visa) => visa.code.toLowerCase() === countryCode,
-              )
-              return {
-                ...country,
-                isVisaFree,
-                isElectronicTravelAuthorization,
-                isVisaOnArrival,
-              }
-            })
-          }
-        } catch (error) {
-          console.error('获取免签数据失败:', error)
-          alert('获取免签数据失败，请稍后重试')
-        } finally {
-          loading.value = false
-        }
-      }
+    if (first?.code) {
+      await handleCountryClick(first.code)
     }
-  } catch (error) {
-    console.error('获取所有国家数据错误:', error)
+  } catch (e) {
+    console.error('初始化失败', e)
+  } finally {
+    loading.value = false
   }
 }
-getAllCountryData()
+init()
 
-// 排序后的排名数据 (按免签数量降序)
+/* ----------------------------------
+ * 排名数据（并列排名）
+ * ---------------------------------- */
 const sortedRankingData = computed(() => {
+  let rank = 0
+  let lastCount: number | null = null
+
   return [...allCountryData.value]
-    .filter((item) => item.has_data !== false) // 只有明确标记为false的才过滤
-    .sort((a, b) => (b.visa_free_count || 0) - (a.visa_free_count || 0))
+    .filter((c) => c.has_data !== false)
+    .sort((a, b) => (b.visa_free_count ?? -1) - (a.visa_free_count ?? -1))
+    .map((item) => {
+      if (item.visa_free_count !== lastCount) {
+        rank++
+        lastCount = item.visa_free_count ?? null
+      }
+      return { ...item, rank }
+    })
 })
 
-// 筛选后的国家数据
-const filteredCountryData = computed(() => {
-  return allCountryData.value.filter((country) => {
-    // 检查国家是否符合任何选中的筛选条件
-    const matchesVisaFree = selectedFilters.value.visaFree && country.isVisaFree
-    const matchesElectronic =
-      selectedFilters.value.electronicTravelAuthorization && country.isElectronicTravelAuthorization
-    const matchesVisaOnArrival = selectedFilters.value.visaOnArrival && country.isVisaOnArrival
-    const matchesRequiresVisa =
-      selectedFilters.value.requiresVisa &&
-      !country.isVisaFree &&
-      !country.isElectronicTravelAuthorization &&
-      !country.isVisaOnArrival
-
-    return matchesVisaFree || matchesElectronic || matchesVisaOnArrival || matchesRequiresVisa
+/* ----------------------------------
+ * 带签证状态的国家列表（派生数据）
+ * ---------------------------------- */
+const countryListWithVisa = computed(() => {
+  return allCountryData.value.map((country) => {
+    const status = visaStatusMap.value[country.code] || 'visa'
+    return {
+      ...country,
+      isVisaFree: status === 'free',
+      isElectronicTravelAuthorization: status === 'eta',
+      isVisaOnArrival: status === 'arrival',
+    }
   })
 })
 
-// 处理国家点击事件
-const handleCountryClick = async (code: string) => {
-  selectedCode.value = code
-  // 获取选中国家的中文名
-  selectedCountry.value = typedCountryCodeToChineseName[code] || ''
+/* ----------------------------------
+ * 筛选后的国家数据
+ * ---------------------------------- */
+const filteredCountryData = computed(() => {
+  return countryListWithVisa.value.filter((country) => {
+    return (
+      (selectedFilters.value.visaFree && country.isVisaFree) ||
+      (selectedFilters.value.electronicTravelAuthorization &&
+        country.isElectronicTravelAuthorization) ||
+      (selectedFilters.value.visaOnArrival && country.isVisaOnArrival) ||
+      (selectedFilters.value.requiresVisa &&
+        !country.isVisaFree &&
+        !country.isElectronicTravelAuthorization &&
+        !country.isVisaOnArrival)
+    )
+  })
+})
 
-  loading.value = true
-  visaFreeAccess.value = []
-  electronicTravelAuthorization.value = []
-  visaOnArrival.value = []
+/* ----------------------------------
+ * 点击国家
+ * ---------------------------------- */
+const handleCountryClick = async (code: string) => {
+  if (selectedCode.value === code) return
 
   try {
-    // 调用免签接口
-    const response = await axios.get(
-      `https://api.henleypassportindex.com/api/v3/visa-single/${code}`,
-    )
+    loading.value = true
+    selectedCode.value = code
+    selectedCountry.value = cnNameMap[code] || ''
 
-    const apiData = response.data
-    if (apiData.visa_free_access && Array.isArray(apiData.visa_free_access)) {
-      // 分别存储三种签证类型
-      visaFreeAccess.value = apiData.visa_free_access || []
-      electronicTravelAuthorization.value = apiData.electronic_travel_authorisation || []
-      visaOnArrival.value = apiData.visa_on_arrival || []
-
-      // 更新所有国家的签证状态 - 忽略大小写比较国家代码
-      allCountryData.value = allCountryData.value.map((country) => {
-        const countryCode = country.code.toLowerCase()
-        const isVisaFree = visaFreeAccess.value.some(
-          (visa) => visa.code.toLowerCase() === countryCode,
-        )
-        const isElectronicTravelAuthorization = electronicTravelAuthorization.value.some(
-          (visa) => visa.code.toLowerCase() === countryCode,
-        )
-        const isVisaOnArrival = visaOnArrival.value.some(
-          (visa) => visa.code.toLowerCase() === countryCode,
-        )
-        return {
-          ...country,
-          isVisaFree,
-          isElectronicTravelAuthorization,
-          isVisaOnArrival,
-        }
-      })
-    }
-  } catch (error) {
-    console.error('获取免签数据失败:', error)
-    alert('获取免签数据失败，请稍后重试')
+    const visaData = await fetchVisaData(code)
+    applyVisaStatus(visaData)
+  } catch (e) {
+    console.error('获取签证信息失败', e)
   } finally {
     loading.value = false
   }
