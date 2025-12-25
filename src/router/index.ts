@@ -10,8 +10,24 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'welcome',
+          component: () => import('@/views/WelcomeView.vue'),
+        },
+        {
+          path: 'home-view',
           name: 'home',
           component: () => import('@/views/HomeView.vue'),
+        },
+        {
+          path: 'passport-ranking',
+          name: 'PassportRanking',
+          component: () => import('@/views/PassportRankingView.vue'),
+          meta: {
+            title: '世界各国护照排名指数',
+            description: '展示世界各国护照排名指数及详细信息',
+            category: 'mine',
+            icon: 'fa-passport',
+          },
         },
         {
           path: 'xiaohongshu-temp',
