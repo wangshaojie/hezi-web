@@ -14,8 +14,8 @@
           <div
             class="grid grid-cols-12 py-2 px-3 bg-gray-100 rounded-lg mb-2 text-base font-medium"
           >
-            <div class="col-span-4">国家/地区</div>
-            <div class="col-span-4 text-center">排名</div>
+            <div class="col-span-3 text-left">排名</div>
+            <div class="col-span-5">国家/地区</div>
             <div class="col-span-3 text-center">免签数量</div>
           </div>
 
@@ -29,8 +29,17 @@
                 class="grid grid-cols-12 py-2 px-3 mb-1 rounded-lg hover:bg-gray-100 transition-all cursor-pointer group"
                 :class="{ 'bg-cyan-50 border-l-4 border-cyan-500': selectedCode === item.code }"
               >
+                <!-- 排名 -->
+                <div class="col-span-3 text-left">
+                  <span
+                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-sm"
+                  >
+                    {{ item.rank }}
+                  </span>
+                </div>
+
                 <!-- 国家名称 + 国旗 -->
-                <div class="col-span-4 flex items-center">
+                <div class="col-span-5 flex items-center">
                   <div class="w-8 h-5 mr-2 bg-gray-200 rounded flex items-center justify-center">
                     <span
                       :class="`fi fi-${item.code.toLowerCase()}`"
@@ -40,15 +49,6 @@
                   <span class="text-gray-800 group-hover:text-cyan-600 transition-colors text-sm">{{
                     countryCodeToChineseName[item.code] || item.name
                   }}</span>
-                </div>
-
-                <!-- 排名 -->
-                <div class="col-span-4 text-center">
-                  <span
-                    class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white text-sm"
-                  >
-                    {{ item.rank }}
-                  </span>
                 </div>
 
                 <!-- 免签数量 + 加载状态指示器 -->
