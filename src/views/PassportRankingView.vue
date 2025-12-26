@@ -28,7 +28,10 @@
                 @click="handleCountryClick(item.code)"
                 class="grid grid-cols-12 py-2 px-3 mb-1 rounded-lg hover:bg-gray-100 transition-all cursor-pointer group"
                 :class="[
-                  { 'bg-cyan-50 border-l-4 border-cyan-500': selectedCode === item.code },
+                  {
+                    'bg-cyan-200 border-l-4 border-cyan-600 shadow-md font-medium':
+                      selectedCode === item.code,
+                  },
                   index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
                 ]"
               >
@@ -84,7 +87,9 @@
               <span :class="`fi fi-${selectedCode.toLowerCase()}`" style="font-size: 1.4rem"></span>
             </div>
             <i v-else class="fa-solid fa-globe mr-2"></i>
-            【{{ selectedCountry || '全球护照免签' }}】免签+落地签+电子旅行授权详情
+            【{{ selectedCountry || '全球护照免签' }}】免签+落地签+电子旅行授权详情 ({{
+              currentCountryVisaFreeCount
+            }})
           </h2>
 
           <!-- 筛选条件 -->
@@ -340,7 +345,7 @@ const sortedRankingData = computed(() => {
 
   return [...allCountryData.value]
     .filter((c) => c.has_data !== false)
-    .sort((a, b) => (b.visa_free_count ?? -1) - (a.visa_free_count ?? -1))
+    .sort((a, b) => (b.visa_free_count ?? 0) - (a.visa_free_count ?? 0))
     .map((item) => {
       if (item.visa_free_count !== lastCount) {
         rank++
@@ -348,6 +353,15 @@ const sortedRankingData = computed(() => {
       }
       return { ...item, rank }
     })
+})
+
+/* ----------------------------------
+ * 当前选中国家的免签数量
+ * ---------------------------------- */
+const currentCountryVisaFreeCount = computed(() => {
+  if (!selectedCode.value) return 0
+  const country = allCountryData.value.find((c) => c.code === selectedCode.value)
+  return country?.visa_free_count ?? 0
 })
 
 /* ----------------------------------
