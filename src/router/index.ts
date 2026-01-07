@@ -198,6 +198,18 @@ const router = createRouter({
             icon: 'fa-chart-line',
           },
         },
+        // 互联网档案馆
+        {
+          path: 'internet-archive',
+          name: 'InternetArchive',
+          component: () => import('@/views/InternetArchiveView.vue'),
+          meta: {
+            title: '互联网档案馆',
+            description: '互联网历史存档与资源库',
+            category: 'mine',
+            icon: 'fa-database',
+          },
+        },
       ],
     },
   ],
