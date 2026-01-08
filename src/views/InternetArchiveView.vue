@@ -231,7 +231,7 @@ const searchSnapshot = async () => {
     }
 
     // 调用接口获取数据
-    const apiUrl = 'http://archive.org/wayback/available'
+    const apiUrl = 'https://archive.org/wayback/available'
     const params = new URLSearchParams({
       url: url.value,
       timestamp: timestamp,
